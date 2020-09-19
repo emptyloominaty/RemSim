@@ -1,6 +1,6 @@
 <template>
     <section>
-        <form>
+        <form v-on:submit.prevent="saveNewDataToStore()">
             <div>
                 <label>Extend Rem </label>
                 <input type="number" v-model="extendRem" >
@@ -34,6 +34,7 @@
             <label>Int </label>
             <input type="number" v-model="statInt">
             </div>
+            <button>Set</button>
         </form>
     </section>
 </template>
@@ -56,7 +57,12 @@
             }
         },
         methods: {
-
+            saveNewDataToStore() {
+                let data = {"extendRem":this.extendRem,"tftUse":this.tftUse,"fightLength":this.fightLength,
+                    "statHaste":this.statHaste,"statCrit":this.statCrit,"statVers":this.statVers,
+                    "statMastery":this.statMastery, "statInt":this.statInt }
+                this.$store.commit('setData',data)
+            }
         }
     }
 </script>
@@ -66,11 +72,16 @@
         display:flex;
         flex-wrap: nowrap;
         flex-direction:column;
+        align-items: center;
+        width:500px;
+        margin: 0 auto;
     }
     form div {
         padding:2px;
     }
-
+    form button {
+        width:80px;
+    }
     input {
         width: 50px;
     }
