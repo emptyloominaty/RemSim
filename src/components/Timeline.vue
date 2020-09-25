@@ -3,7 +3,7 @@
         <div class="remDiv" v-for="item in time" :key="item.id" v-bind:class="{rems3: item.rems===3, rems4: item.rems===4, rems5: item.rems===5, morethan5rems: item.rems>5}" >
           {{ item.time }}
           <p>  <b>{{ item.rems }}</b> </p>
-            <img :src="'/img/'+item.usedAbility+'.jpg'">
+            <img v-if="item.usedAbility!=='none'" :src="'/img/'+item.usedAbility+'.jpg'">
             <img class="tftImg" v-if="item.tftUsed" :src="'/img/tft.jpg'">
         </div>
     </section>

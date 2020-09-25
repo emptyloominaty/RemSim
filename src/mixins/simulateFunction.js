@@ -44,8 +44,8 @@ export default {
             let tftRem = 0.5
             let tftUsed = 0
             //blackout kick
-            let bkOnCd = 3
-            let bkCd = 3
+            let bkOnCd = 3 / (1 + (settings.statHaste / 100))
+            let bkCd = 3 / (1 + (settings.statHaste / 100))
             let totm = 0
             let maxTotm = 3
             //tiger palm
@@ -54,6 +54,7 @@ export default {
 
             //---------Loop--------------------------------------------------------
             for (let i=0; i<settings.fightLength; i++) {
+                usedAbility = "none"
                 tftUsed = 0
                 gcdUsed = 0
                 //--------BUFFS----------
@@ -61,10 +62,15 @@ export default {
                 if (settings.statHaste !== currentHaste ) {
                     rskCd = rskCdDefault / (1 + (currentHaste / 100))
                     gcd = 1.5 / (1 + (currentHaste / 100))
+                    tftRsk = 9 / (1 + (settings.statHaste / 100))
+                    bkCd = 3 / (1 + (settings.statHaste / 100))
                 }
                 //-----CDs-----
                 if (rskOnCd<rskCd) {
                     rskOnCd+=gcd
+                }
+                if (bkOnCd<bkCd) {
+                    bkOnCd+=gcd
                 }
                 if (tftOnCd<tftCd) {
                     tftOnCd+=gcd
@@ -148,17 +154,22 @@ export default {
                             }
                         }
                     } else if (mode==="realGameSim") {
-                        if (bkOnCd>=bkCd && rskOnCd > 2) {
+                        if (bkOnCd>=bkCd && (rskCd/rskOnCd) > 1.33) {
                             usedAbility = "bk"
+                            bkOnCd=0
+                            let resetChance = (Math.random()*100)
+                            if (resetChance < 15 * (1 + totm)) {
+                                rskOnCd = rskCd
+                            }
+                            totm = 0
                             //dmg * (1+totm)
-                        }else {
+                        } else {
                             usedAbility = "tp"
                             if (totm<maxTotm) {
                                 totm++
                             }
                         }
                     }
-
 
                 }
                 //------------------------
