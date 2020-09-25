@@ -9,7 +9,6 @@ export default {
             let mode = settings.simMode
             // eslint-disable-next-line no-unused-vars
             let tftUseOn = settings.tftUse
-            console.log(tftUseOn)
             let timeline=[]
             let rems = 0
             let time = 0
@@ -89,7 +88,7 @@ export default {
                 //------Use Ability-------
                 if (gcdUsed===0) {
                     gcdUsed=1
-                    if (remCharges>0) {                 //REM
+                    breakme: if (remCharges>0) {                 //REM
                         remOnCd=0
                         remCharges--
                         manaUsed += remManaCost
@@ -98,25 +97,26 @@ export default {
                         let remDuration2 = remDuration
                         let remMaxDuration2 = remMaxDuration
                         //Thunder Focus Tea
-                        if (tftUseOn==0) {
-                            if (tftOnCd>=tftCd) {
-                                remDuration2 = remDuration2 + tftRem
-                                remMaxDuration2 = (remDuration2 + tftRem) * (settings.extendRem)
-                                tftOnCd = 0
-                                console.log("tft on rem")
-                            }
+                        if (tftOnCd>=tftCd && tftUseOn==0) {
+                            remDuration2 = remDuration2 + tftRem
+                            remMaxDuration2 = (remDuration2 + tftRem) * (settings.extendRem)
+                            tftOnCd = 0
                         }
-                        rem.push([remDuration2,remMaxDuration2])
+                        if (mode!=="infiniteRSK") {
+                            rem.push([remDuration2, remMaxDuration2])
+                        } else {
+                            rem.push([remMaxDuration2*2, 0])
+                        }
                         totalRems ++
-                    } else if (rskOnCd>=rskCd) {         //RSK
+                    }else if (rskOnCd>=rskCd) {         //RSK
+                        if (mode==="infiniteRSK") {
+                            break breakme;
+                        }
                         rskOnCd=0
                         //Thunder Focus Tea
-                        if (tftUseOn==1) {
-                            if (tftOnCd >= tftCd) {
-                                rskOnCd = tftRsk
-                                tftOnCd = 0
-                                console.log("tft on rsk")
-                            }
+                        if (tftOnCd >= tftCd && tftUseOn==1) {
+                            rskOnCd = tftRsk
+                            tftOnCd = 0
                         }
                         manaUsed += rskManaCost
                         mana -= rskManaCost
