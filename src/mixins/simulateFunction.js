@@ -5,23 +5,30 @@ export default {
     },
     methods: {
         simulate(settings) {
-            // eslint-disable-next-line no-unused-vars
             let mode = settings.simMode
-            // eslint-disable-next-line no-unused-vars
             let tftUseOn = settings.tftUse
             let timeline=[]
             let rems = 0
             let time = 0
             let gcd = 1.5 / (1 + (settings.statHaste / 100))
             let currentHaste = settings.statHaste
+            let spellpower = 0
+            let masteryHeal = 0
+            let rmHeal = 0
+            let remHeal = 0
             let rem = [[]]
             let usedAbility = ""
             // eslint-disable-next-line no-unused-vars
             let totalRems = 0
             let mana = 100
-            let manaUsed = 0
 
             let gcdUsed = 0
+
+            let manaUsed = 0
+            let damageDone = 0
+            let healingDone = 0
+
+
             //---------CONFIG--------
             //rsk
             let rskManaCost = 1.5
@@ -29,6 +36,7 @@ export default {
             let rskCd = rskCdDefault / (1 + (settings.statHaste / 100))
             let rskOnCd = rskCdDefault  / (1 + (settings.statHaste / 100))
             let rskExtend = 4
+            let rskDamage = 0
             //rem
             let remManaCost = 2.2
             let remCd = 9
@@ -48,22 +56,37 @@ export default {
             let bkCd = 3 / (1 + (settings.statHaste / 100))
             let totm = 0
             let maxTotm = 3
+            let bkDamage = 0
             //tiger palm
-
+            let tpDamage = 0
             //-----------------------
 
             //---------Loop--------------------------------------------------------
-            for (let i=0; i<settings.fightLength; i++) {
+            for (let i=0; i<(settings.fightLength*(1 + (currentHaste / 100))); i++) {
+
+                spellpower = ((settings.statInt*1.443)*(1+(settings.statVers/100)))
+                masteryHeal = ((settings.statInt*1.443)*(settings.statMastery/100))
+
+                rmHeal = (spellpower * 0.2)
+                remHeal = ((spellpower * 1.61) * (1 + (currentHaste / 100)) / 20)
+
+                rskDamage = spellpower * 1.433
+                bkDamage = spellpower * 0.56
+                tpDamage = spellpower * 0.19
+
+
                 usedAbility = "none"
                 tftUsed = 0
                 gcdUsed = 0
+                healingDone = 0
+                damageDone = 0
                 //--------BUFFS----------
                 //-----------------------
                 if (settings.statHaste !== currentHaste ) {
                     rskCd = rskCdDefault / (1 + (currentHaste / 100))
                     gcd = 1.5 / (1 + (currentHaste / 100))
-                    tftRsk = 9 / (1 + (settings.statHaste / 100))
-                    bkCd = 3 / (1 + (settings.statHaste / 100))
+                    tftRsk = 9 / (1 + (currentHaste / 100))
+                    bkCd = 3 / (1 + (currentHaste / 100))
                 }
                 //-----CDs-----
                 if (rskOnCd<rskCd) {
@@ -91,6 +114,9 @@ export default {
                     mana=100
                 }
                 if (rems>0) {
+                    //Healing
+                    healingDone+=remHeal * rems
+                    //-------
                     for (let a = 0; a < rem.length; a++) {
                         rem[a][0] -= gcd
                         if (rem[a][0]<0) {
@@ -104,7 +130,7 @@ export default {
                 //------Use Ability-------
                 if (gcdUsed===0) {
                     gcdUsed=1
-                    breakme: if (remCharges>0) {                 //REM
+                    breakme: if (remCharges>0) {                 //REM----------------------------
                         remOnCd=0
                         remCharges--
                         manaUsed += remManaCost
@@ -113,6 +139,7 @@ export default {
                         let remDuration2 = remDuration
                         let remMaxDuration2 = remMaxDuration
                         usedAbility = "rem"
+                        healingDone += masteryHeal
                         //Thunder Focus Tea
                         if (tftOnCd>=tftCd && tftUseOn==0) {
                             remDuration2 = remDuration2 + tftRem
@@ -126,12 +153,13 @@ export default {
                             rem.push([remMaxDuration2*2, 0])
                         }
                         totalRems ++
-                    }else if (rskOnCd>=rskCd) {         //RSK
+                    }else if (rskOnCd>=rskCd) {                 //RSK-------------------------------
                         if (mode==="infiniteRSK") {
                             break breakme;
                         }
                         rskOnCd=0
                         usedAbility = "rsk"
+                        damageDone += rskDamage
                         //Thunder Focus Tea
                         if (tftOnCd >= tftCd && tftUseOn==1) {
                             rskOnCd = tftRsk
@@ -140,6 +168,7 @@ export default {
                         }
                         manaUsed += rskManaCost
                         mana -= rskManaCost
+                        healingDone += rmHeal * rems
                         if (rems>0) {
                             for (let a = 0; a < rem.length; a++) {
                                 if (rem[a][1]>0) {
@@ -154,17 +183,19 @@ export default {
                             }
                         }
                     } else if (mode==="realGameSim") {
-                        if (bkOnCd>=bkCd && (rskCd/rskOnCd) > 1.33) {
+                        if (bkOnCd>=bkCd && (rskCd/rskOnCd) > 1.33) {   //BLACKOUT KICK --------
                             usedAbility = "bk"
                             bkOnCd=0
                             let resetChance = (Math.random()*100)
                             if (resetChance < 15 * (1 + totm)) {
                                 rskOnCd = rskCd
                             }
+                            damageDone += bkDamage * (1+totm)
                             totm = 0
-                            //dmg * (1+totm)
-                        } else {
+
+                        } else {                                        //TIGER PALM------------
                             usedAbility = "tp"
+                            damageDone += tpDamage
                             if (totm<maxTotm) {
                                 totm++
                             }
@@ -174,10 +205,7 @@ export default {
                 }
                 //------------------------
 
-
-
-
-                timeline[i] = {id:i,time:time.toFixed(1),rems:rems,mana:mana,manaUsed:manaUsed,usedAbility:usedAbility,tftUsed:tftUsed}
+                timeline[i] = {id:i,time:time.toFixed(1),rems:rems,mana:mana,manaUsed:manaUsed,usedAbility:usedAbility,tftUsed:tftUsed,damageDone:damageDone.toFixed(0),healingDone:healingDone.toFixed(0)}
             }
             //--------End of Loop-------------------------------------------------
             return timeline

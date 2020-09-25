@@ -4,39 +4,39 @@
             <div>
                 <label>Mode </label>
                 <select  type="text" v-model="simMode">
-                    <option value="infiniteRSK" selected>RSK 0s cd</option>
-                    <option value="onlyRSK">RSK default cd (no tp + bk)</option>
-                    <option value="realGameSim">RSK default cd + tp + bk</option>
+                    <option value="infiniteRSK" selected>Auto ReM Extend</option>
+                    <option value="onlyRSK">only RSK </option>
+                    <option value="realGameSim">RSK + tp + bk</option>
                 </select>
             </div>
             <div>
                 <label>Extend Rem </label>
-                <input type="text" v-model="extendRem" >
+                <input type="text" v-model="extendRem" > 1=100%
             </div>
             <div>
                 <label>Use TFT </label>
-                <input type="number" max="1" min="0" value="1" v-model="tftUse" >
+                <input type="number" max="1" min="0" value="1" v-model="tftUse" > 0=ReM 1=RSK
             </div>
             <div>
                 <label>Fight Length </label>
-                <input type="number" max="1000" min="30" v-model="fightLength">
+                <input type="number" max="1000" min="30" v-model="fightLength"> Sec
             </div>
             <hr>
             <div>
                 <label> Haste </label>
-                <input type="text" v-model="statHaste">
+                <input type="text" v-model="statHaste"> %
             </div>
             <div>
                 <label>Crit </label>
-                <input type="text" v-model="statCrit">
+                <input type="text" v-model="statCrit"> %
             </div>
             <div>
                 <label>Vers </label>
-                <input type="text" v-model="statVers">
+                <input type="text" v-model="statVers"> %
             </div>
             <div>
                 <label>Mastery </label>
-                <input type="text" v-model="statMastery">
+                <input type="text" v-model="statMastery"> %
             </div>
             <div>
                 <label>Int </label>
