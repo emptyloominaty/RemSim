@@ -2,37 +2,45 @@
     <section>
         <form v-on:submit.prevent="saveNewDataToStore()">
             <div>
+                <label>Mode </label>
+                <select  type="text" v-model="simMode">
+                    <option value="infiniteRSK" selected>RSK 0s cd</option>
+                    <option value="onlyRSK">RSK default cd (no tp + bk)</option>
+                    <option value="realGameSim">RSK default cd + tp + bk</option>
+                </select>
+            </div>
+            <div>
                 <label>Extend Rem </label>
-                <input type="number" v-model="extendRem" >
+                <input type="text" v-model="extendRem" >
             </div>
             <div>
-            <label>Use TFT </label>
-            <input type="number" max="1" min="0" v-model="tftUse" >
+                <label>Use TFT </label>
+                <input type="number" max="1" min="0" value="1" v-model="tftUse" >
             </div>
             <div>
-            <label>Fight Length </label>
-            <input type="number" max="1000" min="30" v-model="fightLength">
+                <label>Fight Length </label>
+                <input type="number" max="1000" min="30" v-model="fightLength">
             </div>
             <hr>
             <div>
-            <label> Haste </label>
-            <input type="number" v-model="statHaste">
+                <label> Haste </label>
+                <input type="text" v-model="statHaste">
             </div>
             <div>
-            <label>Crit </label>
-            <input type="number" v-model="statCrit">
+                <label>Crit </label>
+                <input type="text" v-model="statCrit">
             </div>
             <div>
-            <label>Vers </label>
-            <input type="number" v-model="statVers">
+                <label>Vers </label>
+                <input type="text" v-model="statVers">
             </div>
             <div>
-            <label>Mastery </label>
-            <input type="number" v-model="statMastery">
+                <label>Mastery </label>
+                <input type="text" v-model="statMastery">
             </div>
             <div>
-            <label>Int </label>
-            <input type="number" v-model="statInt">
+                <label>Int </label>
+                <input type="text" v-model="statInt">
             </div>
             <button>Set</button>
         </form>
@@ -52,7 +60,8 @@
                 statCrit:0, //%
                 statVers:0, //%
                 statMastery:0, //%
-                statInt: this.$store.state.testState
+                statInt: this.$store.state.testState,
+                simMode: ""
                 //vars
             }
         },
@@ -60,7 +69,7 @@
             saveNewDataToStore() {
                 let data = {"extendRem":this.extendRem,"tftUse":this.tftUse,"fightLength":this.fightLength,
                     "statHaste":this.statHaste,"statCrit":this.statCrit,"statVers":this.statVers,
-                    "statMastery":this.statMastery, "statInt":this.statInt }
+                    "statMastery":this.statMastery, "statInt":this.statInt,"simMode":this.simMode }
                 this.$store.commit('setData',data)
             }
         }
