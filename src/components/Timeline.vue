@@ -3,6 +3,8 @@
         <div class="remDiv" v-for="item in time" :key="item.id" v-bind:class="{rems3: item.rems===3, rems4: item.rems===4, rems5: item.rems===5, morethan5rems: item.rems>5}" >
           {{ item.time }}
           <p>  <b>{{ item.rems }}</b> </p>
+            <img :src="'/img/'+item.usedAbility+'.jpg'">
+            <img class="tftImg" v-if="item.tftUsed" :src="'/img/tft.jpg'">
         </div>
     </section>
 </template>
@@ -36,8 +38,17 @@
         margin-bottom:20px;
     }
     p {
-        padding-top: 10px;
-        margin-bottom: 10px;
+        margin-top:10px;
+        margin-bottom: 2px;
+        font-size:1.35rem;
+    }
+    img {
+        width:32px;
+    }
+    .tftImg {
+        position:relative;
+        top:-10px;
+        margin-bottom:-20px;
     }
     .remDiv {
         width:38px;

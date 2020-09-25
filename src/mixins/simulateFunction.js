@@ -15,6 +15,7 @@ export default {
             let gcd = 1.5 / (1 + (settings.statHaste / 100))
             let currentHaste = settings.statHaste
             let rem = [[]]
+            let usedAbility = ""
             // eslint-disable-next-line no-unused-vars
             let totalRems = 0
             let mana = 100
@@ -41,10 +42,19 @@ export default {
             let tftOnCd = 30
             let tftRsk = 9 / (1 + (settings.statHaste / 100))
             let tftRem = 0.5
+            let tftUsed = 0
+            //blackout kick
+            let bkOnCd = 3
+            let bkCd = 3
+            let totm = 0
+            let maxTotm = 3
+            //tiger palm
+
             //-----------------------
 
             //---------Loop--------------------------------------------------------
             for (let i=0; i<settings.fightLength; i++) {
+                tftUsed = 0
                 gcdUsed = 0
                 //--------BUFFS----------
                 //-----------------------
@@ -96,11 +106,13 @@ export default {
                         rems+=1
                         let remDuration2 = remDuration
                         let remMaxDuration2 = remMaxDuration
+                        usedAbility = "rem"
                         //Thunder Focus Tea
                         if (tftOnCd>=tftCd && tftUseOn==0) {
                             remDuration2 = remDuration2 + tftRem
                             remMaxDuration2 = (remDuration2 + tftRem) * (settings.extendRem)
                             tftOnCd = 0
+                            tftUsed = 1
                         }
                         if (mode!=="infiniteRSK") {
                             rem.push([remDuration2, remMaxDuration2])
@@ -113,10 +125,12 @@ export default {
                             break breakme;
                         }
                         rskOnCd=0
+                        usedAbility = "rsk"
                         //Thunder Focus Tea
                         if (tftOnCd >= tftCd && tftUseOn==1) {
                             rskOnCd = tftRsk
                             tftOnCd = 0
+                            tftUsed = 1
                         }
                         manaUsed += rskManaCost
                         mana -= rskManaCost
@@ -130,18 +144,29 @@ export default {
                                         rem[a][0] += rem[a][1]
                                         rem[a][1] = 0
                                     }
-
                                 }
                             }
                         }
+                    } else if (mode==="realGameSim") {
+                        if (bkOnCd>=bkCd && rskOnCd > 2) {
+                            usedAbility = "bk"
+                            //dmg * (1+totm)
+                        }else {
+                            usedAbility = "tp"
+                            if (totm<maxTotm) {
+                                totm++
+                            }
+                        }
                     }
+
+
                 }
                 //------------------------
 
 
 
 
-                timeline[i] = {id:i,time:time.toFixed(1),rems:rems,mana:mana,manaUsed:manaUsed}
+                timeline[i] = {id:i,time:time.toFixed(1),rems:rems,mana:mana,manaUsed:manaUsed,usedAbility:usedAbility,tftUsed:tftUsed}
             }
             //--------End of Loop-------------------------------------------------
             return timeline
