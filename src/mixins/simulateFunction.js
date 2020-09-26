@@ -61,11 +61,24 @@ export default {
 
             //---------Loop--------------------------------------------------------
             for (let i=0; i<(settings.fightLength* (1 + (currentHaste / 100))); i++) {
-            if (time>settings.fightLength) {
-                break;
-            }
-                spellpower = ((settings.statInt*1.443)*(1+(settings.statVers/100)))
-                masteryHeal = ((settings.statInt*1.443)*(settings.statMastery/100))
+                if (time>settings.fightLength) {
+                    break;
+                }
+                    spellpower = ((settings.statInt*1.443)*(1+(settings.statVers/100)))
+                    masteryHeal = ((settings.statInt*1.443)*(settings.statMastery/100))
+
+                    /*----Crit----- */
+                if (settings.statCrit>100) {
+                    settings.statCrit = 100
+                }
+                let critChance = (Math.random()*100)
+                if (critChance < settings.statCrit) {
+                    spellpower = ((settings.statInt*1.443)*(1+(settings.statVers/100)))*2
+                    masteryHeal = ((settings.statInt*1.443)*(settings.statMastery/100))*2
+                }
+
+
+
 
                 rmHeal = (spellpower * 0.2)
                 remHeal = ((spellpower * 1.61) * (1 + (currentHaste / 100)) / 20)
