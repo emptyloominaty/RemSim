@@ -2,17 +2,23 @@
   <div id="app">
     <Settings />
     <Timeline />
+    <Chart/>
   </div>
 </template>
 
 <script>
 import Timeline from './components/Timeline.vue'
 import Settings from './components/Settings.vue'
+import Chart from './components/chart.vue'
+
 export default {
   name: 'App',
   components: {
     Timeline,
-    Settings
+    Settings,
+    Chart
+  },
+  methods: {
   }
 }
 </script>

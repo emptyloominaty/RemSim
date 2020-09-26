@@ -20,7 +20,7 @@
                 </div>
                 <div class="inputDiv">
                     <label>Fight Length </label>
-                    <input type="number" max="1000" min="30" v-model="fightLength">
+                    <input type="number" max="600" min="30" v-model="fightLength">
                 </div>
                 <button>Set</button>
             </div>

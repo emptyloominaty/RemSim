@@ -60,8 +60,10 @@ export default {
             //-----------------------
 
             //---------Loop--------------------------------------------------------
-            for (let i=0; i<((settings.fightLength*(1 + (currentHaste / 100)))/1.5); i++) {
-
+            for (let i=0; i<(settings.fightLength* (1 + (currentHaste / 100))); i++) {
+            if (time>settings.fightLength) {
+                break;
+            }
                 spellpower = ((settings.statInt*1.443)*(1+(settings.statVers/100)))
                 masteryHeal = ((settings.statInt*1.443)*(settings.statMastery/100))
 
@@ -86,6 +88,9 @@ export default {
                     gcd = 1.5 / (1 + (currentHaste / 100))
                     tftRsk = 9 / (1 + (currentHaste / 100))
                     bkCd = 3 / (1 + (currentHaste / 100))
+                }
+                if (gcd<0.75) {
+                    gcd = 0.75
                 }
                 //-----CDs-----
                 if (rskOnCd<rskCd) {
@@ -129,7 +134,7 @@ export default {
                 //------Use Ability-------
                 if (gcdUsed===0) {
                     gcdUsed=1
-                    breakme: if (remCharges>0 && rems<20) {                 //REM----------------------------
+                    abilityLoop: if (remCharges>0 && rems<20) {                 //REM----------------------------
                         remOnCd=0
                         remCharges--
                         manaUsed += remManaCost
@@ -153,7 +158,7 @@ export default {
                         }
                     }else if (rskOnCd>=rskCd) {                 //RSK-------------------------------
                         if (mode==="infiniteRSK") {
-                            break breakme;
+                            break abilityLoop;
                         }
                         rskOnCd=0
                         usedAbility = "rsk"
@@ -206,7 +211,33 @@ export default {
                 timeline[i] = {id:i,time:time.toFixed(1),rems:rems,mana:mana,manaUsed:manaUsed,usedAbility:usedAbility,tftUsed:tftUsed,damageDone:damageDone.toFixed(0),healingDone:healingDone.toFixed(0)}
             }
             //--------End of Loop-------------------------------------------------
+            this.generateChartData(timeline)
+
             return timeline
+        },
+        generateChartData(timeline) {
+            let labels = []
+            let data = []
+            for (let i=0; i<timeline.length ; i++) {
+                labels.push(timeline[i].time)
+                data.push(timeline[i].rems)
+            }
+
+            let chartdata = {
+                labels: labels,
+                    datasets: [
+                    {
+                        label: 'ReMs',
+                        fontColor: '#ffffff',
+                        borderColor: '#78f871',
+                        data: data,
+                        pointRadius: 4,
+                        lineTension:0,
+                        pointHoverRadius: 7,
+                    }
+                ]
+            }
+            this.$store.commit('setChartData',chartdata)
         }
     }
 }
