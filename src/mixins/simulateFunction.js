@@ -65,7 +65,7 @@ export default {
                     break;
                 }
                     spellpower = ((settings.statInt*1.443)*(1+(settings.statVers/100)))
-                    masteryHeal = ((settings.statInt*1.443)*(settings.statMastery/100))
+                    masteryHeal = ((spellpower)*(settings.statMastery/100))
 
                     /*----Crit----- */
                 if (settings.statCrit>100) {
@@ -224,13 +224,13 @@ export default {
                 timeline[i] = {id:i,time:time.toFixed(1),rems:rems,mana:mana,manaUsed:manaUsed,usedAbility:usedAbility,tftUsed:tftUsed,damageDone:damageDone.toFixed(0),healingDone:healingDone.toFixed(0)}
             }
             //--------End of Loop-------------------------------------------------
-            this.generateChartData(timeline,"rems","ReMs","setChartData","#78f871")
-            this.generateChartData(timeline,"mana","Mana","setChartDataMana","#6edcf8")
-            this.generateChartData(timeline,"damageDone","Damage","setChartDataDamage","#ce383e")
-            this.generateChartData(timeline,"healingDone","Heal","setChartDataHeal","#05c300")
+            this.generateChartData(timeline,"rems","ReMs","setChartData","#78f871",0)
+            this.generateChartData(timeline,"mana","Mana","setChartDataMana","#6edcf8",0.4)
+            this.generateChartData(timeline,"damageDone","Damage","setChartDataDamage","#ce383e",0.4)
+            this.generateChartData(timeline,"healingDone","Heal","setChartDataHeal","#05c300",0.5)
             return timeline
         },
-        generateChartData(timeline,name,nameLabel,store,lineColor) {
+        generateChartData(timeline,name,nameLabel,store,lineColor,lineTension) {
             let labels = []
             let data = []
             for (let i=0; i<timeline.length ; i++) {
@@ -247,7 +247,7 @@ export default {
                         borderColor: lineColor,
                         data: data,
                         pointRadius: 4,
-                        lineTension:0,
+                        lineTension:lineTension,
                         pointHoverRadius: 7,
                     }
                 ]
