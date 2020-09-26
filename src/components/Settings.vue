@@ -64,8 +64,8 @@
                 statCrit:0, //%
                 statVers:0, //%
                 statMastery:0, //%
-                statInt: this.$store.state.testState,
-                simMode: ""
+                statInt: 1000,
+                simMode: "infiniteRSK"
                 //vars
             }
         },

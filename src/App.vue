@@ -1,8 +1,11 @@
 <template>
   <div id="app">
-    <Settings />
-    <Timeline />
+    <Settings/>
+    <Timeline/>
     <Chart/>
+    <ChartHeal/>
+    <ChartDamage/>
+    <ChartMana/>
   </div>
 </template>
 
@@ -10,13 +13,19 @@
 import Timeline from './components/Timeline.vue'
 import Settings from './components/Settings.vue'
 import Chart from './components/chart.vue'
+import ChartMana from './components/chartMana.vue'
+import ChartDamage from './components/chartDamage.vue'
+import ChartHeal from './components/chartHeal.vue'
 
 export default {
   name: 'App',
   components: {
     Timeline,
     Settings,
-    Chart
+    Chart,
+    ChartMana,
+    ChartDamage,
+    ChartHeal
   },
   methods: {
   }

@@ -5,21 +5,13 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
     state: {
-        testState: 555,
         remSetting: {extendRem:1, tftUse:1, fightLength:120,
             statHaste:0, statCrit:0, statVers:0,
             statMastery:0, statInt:0,simMode:"infiniteRSK" },
-        chartData: {
-            labels: [0,1],
-            datasets: [
-                {
-                    label: 'Test',
-                    fontColor: '#ffffff',
-                    borderColor: '#87f86d',
-                    data: [40, 20]
-                }
-            ]
-        }
+        chartData: {},
+        chartDataMana: {},
+        chartDataDamage: {},
+        chartDataHeal: {},
     },
     mutations: {
         setData(state, newData) {
@@ -27,6 +19,15 @@ export default new Vuex.Store({
         },
         setChartData(state, newData) {
             state.chartData = newData
+        },
+        setChartDataMana(state, newData) {
+            state.chartDataMana = newData
+        },
+        setChartDataDamage(state, newData) {
+            state.chartDataDamage = newData
+        },
+        setChartDataHeal(state, newData) {
+            state.chartDataHeal = newData
         }
     },
     actions: {

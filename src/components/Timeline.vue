@@ -65,6 +65,7 @@
     }
     .remDiv {
         width:38px;
+        min-height:92px;
         padding: 5px;
         margin-right:-1px;
         margin-top:-1px;

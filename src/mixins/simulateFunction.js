@@ -211,25 +211,27 @@ export default {
                 timeline[i] = {id:i,time:time.toFixed(1),rems:rems,mana:mana,manaUsed:manaUsed,usedAbility:usedAbility,tftUsed:tftUsed,damageDone:damageDone.toFixed(0),healingDone:healingDone.toFixed(0)}
             }
             //--------End of Loop-------------------------------------------------
-            this.generateChartData(timeline)
-
+            this.generateChartData(timeline,"rems","ReMs","setChartData","#78f871")
+            this.generateChartData(timeline,"mana","Mana","setChartDataMana","#6edcf8")
+            this.generateChartData(timeline,"damageDone","Damage","setChartDataDamage","#ce383e")
+            this.generateChartData(timeline,"healingDone","Heal","setChartDataHeal","#05c300")
             return timeline
         },
-        generateChartData(timeline) {
+        generateChartData(timeline,name,nameLabel,store,lineColor) {
             let labels = []
             let data = []
             for (let i=0; i<timeline.length ; i++) {
                 labels.push(timeline[i].time)
-                data.push(timeline[i].rems)
+                data.push(timeline[i][name])
             }
 
             let chartdata = {
                 labels: labels,
                     datasets: [
                     {
-                        label: 'ReMs',
+                        label: nameLabel,
                         fontColor: '#ffffff',
-                        borderColor: '#78f871',
+                        borderColor: lineColor,
                         data: data,
                         pointRadius: 4,
                         lineTension:0,
@@ -237,7 +239,7 @@ export default {
                     }
                 ]
             }
-            this.$store.commit('setChartData',chartdata)
+            this.$store.commit(store,chartdata)
         }
     }
 }

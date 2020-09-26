@@ -1,8 +1,8 @@
 <script>
-     import { Line} from 'vue-chartjs'
+    import { Line} from 'vue-chartjs'
 
     export default {
-        name: "Chart",
+        name: "ChartHeal",
         extends: Line,
         data() {
             return {
@@ -35,19 +35,14 @@
                         yAxes: [{
                             display: true,
                             ticks: {
-                                beginAtZero: true,
-                                callback: function (value) {
-                                    if (value % 1 === 0) {
-                                        return value;
-                                    }
-                                },
+                                suggestedMin: 0,
                             },
                             gridLines: {
                                 color: '#555'
                             },
                             scaleLabel: {
                                 display: true,
-                                labelString: 'Rems'
+                                labelString: 'Heal'
                             }
                         }]
                     }
@@ -57,8 +52,8 @@
             }
         },
         watch: {
-            '$store.state.chartData': function() {
-                this.chartData = this.$store.state.chartData
+            '$store.state.chartDataHeal': function() {
+                this.chartData = this.$store.state.chartDataHeal
                 this.renderChart(this.chartData,this.options)
             }
         }
