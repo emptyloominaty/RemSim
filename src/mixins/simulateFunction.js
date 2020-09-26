@@ -18,8 +18,6 @@ export default {
             let remHeal = 0
             let rem = [[]]
             let usedAbility = ""
-            // eslint-disable-next-line no-unused-vars
-            let totalRems = 0
             let mana = 100
 
             let gcdUsed = 0
@@ -62,7 +60,7 @@ export default {
             //-----------------------
 
             //---------Loop--------------------------------------------------------
-            for (let i=0; i<(settings.fightLength*(1 + (currentHaste / 100))); i++) {
+            for (let i=0; i<((settings.fightLength*(1 + (currentHaste / 100)))/1.5); i++) {
 
                 spellpower = ((settings.statInt*1.443)*(1+(settings.statVers/100)))
                 masteryHeal = ((settings.statInt*1.443)*(settings.statMastery/100))
@@ -81,6 +79,7 @@ export default {
                 healingDone = 0
                 damageDone = 0
                 //--------BUFFS----------
+
                 //-----------------------
                 if (settings.statHaste !== currentHaste ) {
                     rskCd = rskCdDefault / (1 + (currentHaste / 100))
@@ -130,7 +129,7 @@ export default {
                 //------Use Ability-------
                 if (gcdUsed===0) {
                     gcdUsed=1
-                    breakme: if (remCharges>0) {                 //REM----------------------------
+                    breakme: if (remCharges>0 && rems<20) {                 //REM----------------------------
                         remOnCd=0
                         remCharges--
                         manaUsed += remManaCost
@@ -143,7 +142,7 @@ export default {
                         //Thunder Focus Tea
                         if (tftOnCd>=tftCd && tftUseOn==0) {
                             remDuration2 = remDuration2 + tftRem
-                            remMaxDuration2 = (remDuration2 + tftRem) * (settings.extendRem)
+                            remMaxDuration2 = (remDuration2 * (1+tftRem)) * (settings.extendRem)
                             tftOnCd = 0
                             tftUsed = 1
                         }
@@ -152,7 +151,6 @@ export default {
                         } else {
                             rem.push([remMaxDuration2*2, 0])
                         }
-                        totalRems ++
                     }else if (rskOnCd>=rskCd) {                 //RSK-------------------------------
                         if (mode==="infiniteRSK") {
                             break breakme;

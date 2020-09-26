@@ -69,6 +69,7 @@
         margin-right:-1px;
         margin-top:-1px;
         border: 1px solid #333;
+        background-color:#fff;
     }
     /*------Tooltip-------*/
     .tooltip {
