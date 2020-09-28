@@ -5,6 +5,7 @@
           <p>  <b>{{ item.rems }}</b> </p>
             <img v-if="item.usedAbility!=='none'" :src="'/img/'+item.usedAbility+'.jpg'">
             <img class="tftImg" v-if="item.tftUsed" :src="'/img/tft.jpg'">
+            {{ item.haste }}
             <div class="tooltip">
                 <span>Heal: <strong> {{ formatNumber(item.healingDone) }} </strong> </span> <br>
                 <hr>

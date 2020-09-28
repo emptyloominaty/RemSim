@@ -3,6 +3,7 @@
     <Settings/>
     <Timeline/>
     <Chart/>
+    <ChartHaste/>
     <ChartHeal/>
     <ChartDamage/>
     <ChartMana/>
@@ -16,6 +17,7 @@ import Chart from './components/chart.vue'
 import ChartMana from './components/chartMana.vue'
 import ChartDamage from './components/chartDamage.vue'
 import ChartHeal from './components/chartHeal.vue'
+import ChartHaste from './components/chartHaste.vue'
 
 export default {
   name: 'App',
@@ -25,7 +27,8 @@ export default {
     Chart,
     ChartMana,
     ChartDamage,
-    ChartHeal
+    ChartHeal,
+    ChartHaste
   },
   methods: {
   }

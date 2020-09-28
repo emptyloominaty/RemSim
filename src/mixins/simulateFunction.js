@@ -5,6 +5,10 @@ export default {
     },
     methods: {
         simulate(settings) {
+            // eslint-disable-next-line no-unused-vars
+            let buffs = [{stat:"haste",increase:40,ppm:2,duration:7,lastproc:0,proc:60/2,procced:0},{stat:"haste",increase:20,ppm:3,duration:6,lastproc:0,proc:60/3,procced:0}]
+
+
             let mode = settings.simMode
             let tftUseOn = settings.tftUse
             let timeline=[]
@@ -60,10 +64,13 @@ export default {
             //-----------------------
 
             //---------Loop--------------------------------------------------------
-            for (let i=0; i<(settings.fightLength* (1 + (currentHaste / 100))); i++) {
+            for (let i=0; i<(settings.fightLength*2); i++) {
                 if (time>settings.fightLength) {
                     break;
                 }
+                currentHaste = settings.statHaste
+
+
                     spellpower = ((settings.statInt*1.443)*(1+(settings.statVers/100)))
                     masteryHeal = ((spellpower)*(settings.statMastery/100))
 
@@ -93,15 +100,41 @@ export default {
                 gcdUsed = 0
                 healingDone = 0
                 damageDone = 0
-                //--------BUFFS----------
+                //--------BUFFS---------- {stat:"haste",increase:20,ppm:2,duration:6,lastproc:0,proc:60/2,procced:0}
+                if (buffs.length > 0) {
+                    for (let b=0; b<buffs.length; b++) {
+                        buffs[b].lastproc+=1*gcd
+                        //---------------------------
+                        if (buffs[b].lastproc>buffs[b].proc) {
+                            buffs[b].lastproc = 0
+                            buffs[b].procced = buffs[b].duration
+                        }
+                        //---------------------------
+                        if (buffs[b].procced>0) {
+                            switch(buffs[b].stat) {
+                                case "haste":
+                                    currentHaste=+currentHaste + +buffs[b].increase
+                                    break;
+                                    /*case "vers"
+                                    * case "mastery"
+                                    * case "int"
+                                    * case "crit" */
+                            }
+                            buffs[b].procced--
+                        }
+                        //---------------------------
 
+
+
+                    }
+                }
                 //-----------------------
-                if (settings.statHaste !== currentHaste ) {
+                // ---------- CDs
                     rskCd = rskCdDefault / (1 + (currentHaste / 100))
                     gcd = 1.5 / (1 + (currentHaste / 100))
                     tftRsk = 9 / (1 + (currentHaste / 100))
                     bkCd = 3 / (1 + (currentHaste / 100))
-                }
+
                 if (gcd<0.75) {
                     gcd = 0.75
                 }
@@ -221,13 +254,14 @@ export default {
                 }
                 //------------------------
 
-                timeline[i] = {id:i,time:time.toFixed(1),rems:rems,mana:mana,manaUsed:manaUsed,usedAbility:usedAbility,tftUsed:tftUsed,damageDone:damageDone.toFixed(0),healingDone:healingDone.toFixed(0)}
+                timeline[i] = {id:i,time:time.toFixed(1),rems:rems,mana:mana,manaUsed:manaUsed,usedAbility:usedAbility,tftUsed:tftUsed,damageDone:damageDone.toFixed(0),healingDone:healingDone.toFixed(0),haste:currentHaste}
             }
             //--------End of Loop-------------------------------------------------
             this.generateChartData(timeline,"rems","ReMs","setChartData","#78f871",0)
             this.generateChartData(timeline,"mana","Mana","setChartDataMana","#6edcf8",0.4)
             this.generateChartData(timeline,"damageDone","Damage","setChartDataDamage","#ce383e",0.4)
             this.generateChartData(timeline,"healingDone","Heal","setChartDataHeal","#05c300",0.5)
+            this.generateChartData(timeline,"haste","Haste","setChartDataHaste","#a800c3",0.5)
             return timeline
         },
         generateChartData(timeline,name,nameLabel,store,lineColor,lineTension) {

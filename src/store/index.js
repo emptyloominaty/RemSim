@@ -12,6 +12,7 @@ export default new Vuex.Store({
         chartDataMana: {},
         chartDataDamage: {},
         chartDataHeal: {},
+        chartDataHaste: {},
     },
     mutations: {
         setData(state, newData) {
@@ -28,6 +29,9 @@ export default new Vuex.Store({
         },
         setChartDataHeal(state, newData) {
             state.chartDataHeal = newData
+        },
+        setChartDataHaste(state, newData) {
+            state.chartDataHaste = newData
         }
     },
     actions: {
