@@ -5,9 +5,7 @@ export default {
     },
     methods: {
         simulate(settings) {
-            // eslint-disable-next-line no-unused-vars
-            let buffs = [{stat:"haste",increase:40,ppm:2,duration:7,lastproc:0,proc:60/2,procced:0},{stat:"haste",increase:20,ppm:3,duration:6,lastproc:0,proc:60/3,procced:0}]
-
+            let buffs = this.$store.state.buffs
 
             let mode = settings.simMode
             let tftUseOn = settings.tftUse
