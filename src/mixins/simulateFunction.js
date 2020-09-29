@@ -13,7 +13,11 @@ export default {
             let rems = 0
             let time = 0
             let gcd = 1.5 / (1 + (settings.statHaste / 100))
-            let currentHaste = settings.statHaste
+            let currentHaste = 0
+            let currentVers = 0
+            let currentCrit = 0
+            let currentInt = 0
+            let currentMastery = 0
             let spellpower = 0
             let masteryHeal = 0
             let rmHeal = 0
@@ -67,19 +71,56 @@ export default {
                     break;
                 }
                 currentHaste = settings.statHaste
+                currentVers = settings.statVers
+                currentCrit = settings.statCrit
+                currentMastery = settings.statMastery
+                currentInt = settings.statInt
 
-
-                    spellpower = ((settings.statInt*1.443)*(1+(settings.statVers/100)))
-                    masteryHeal = ((spellpower)*(settings.statMastery/100))
+                //--------BUFFS---------- {stat:"haste",increase:20,ppm:2,duration:6,lastproc:0,proc:60/2,procced:0}
+                if (buffs.length > 0) {
+                    for (let b=0; b<buffs.length; b++) {
+                        buffs[b].lastproc+=1*gcd
+                        //---------------------------
+                        if (buffs[b].lastproc>buffs[b].proc) {
+                            buffs[b].lastproc = 0
+                            buffs[b].procced = buffs[b].duration
+                        }
+                        //---------------------------
+                        if (buffs[b].procced>0) {
+                            switch(buffs[b].stat) {
+                                case "haste":
+                                    currentHaste=+currentHaste + +buffs[b].increase
+                                    break;
+                                case "vers":
+                                    currentVers=+currentVers + +buffs[b].increase
+                                    break;
+                                case "mastery":
+                                    currentMastery=+currentMastery + +buffs[b].increase
+                                    break;
+                                case "crit":
+                                    currentCrit=+currentCrit + +buffs[b].increase
+                                    break;
+                                case "int":
+                                    currentInt=+currentInt + +buffs[b].increase
+                                    break;
+                            }
+                            buffs[b].procced--
+                        }
+                        //---------------------------
+                    }
+                }
+                //-----------------------
+                spellpower = ((currentInt*1.443)*(1+(currentVers/100)))
+                masteryHeal = ((spellpower)*(currentMastery/100))
 
                     /*----Crit----- */
-                if (settings.statCrit>100) {
-                    settings.statCrit = 100
+                if (currentCrit>100) {
+                    currentCrit = 100
                 }
                 let critChance = (Math.random()*100)
-                if (critChance < settings.statCrit) {
-                    spellpower = ((settings.statInt*1.443)*(1+(settings.statVers/100)))*2
-                    masteryHeal = ((settings.statInt*1.443)*(settings.statMastery/100))*2
+                if (critChance < currentCrit) {
+                    spellpower = spellpower * 2
+                    masteryHeal = masteryHeal * 2
                 }
 
 
@@ -98,35 +139,6 @@ export default {
                 gcdUsed = 0
                 healingDone = 0
                 damageDone = 0
-                //--------BUFFS---------- {stat:"haste",increase:20,ppm:2,duration:6,lastproc:0,proc:60/2,procced:0}
-                if (buffs.length > 0) {
-                    for (let b=0; b<buffs.length; b++) {
-                        buffs[b].lastproc+=1*gcd
-                        //---------------------------
-                        if (buffs[b].lastproc>buffs[b].proc) {
-                            buffs[b].lastproc = 0
-                            buffs[b].procced = buffs[b].duration
-                        }
-                        //---------------------------
-                        if (buffs[b].procced>0) {
-                            switch(buffs[b].stat) {
-                                case "haste":
-                                    currentHaste=+currentHaste + +buffs[b].increase
-                                    break;
-                                    /*case "vers"
-                                    * case "mastery"
-                                    * case "int"
-                                    * case "crit" */
-                            }
-                            buffs[b].procced--
-                        }
-                        //---------------------------
-
-
-
-                    }
-                }
-                //-----------------------
                 // ---------- CDs
                     rskCd = rskCdDefault / (1 + (currentHaste / 100))
                     gcd = 1.5 / (1 + (currentHaste / 100))

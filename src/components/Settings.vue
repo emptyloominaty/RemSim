@@ -60,8 +60,8 @@
                                 <option value="haste" selected>Haste</option>
                                 <option value="crit">Crit</option>
                                 <option value="vers">Vers</option>
-                                <option value="vers">Mastery</option>
-                                <option value="vers">Int</option>
+                                <option value="mastery">Mastery</option>
+                                <option value="int">Int</option>
                             </select>
                         </div>
                         <div class="inputDiv">
